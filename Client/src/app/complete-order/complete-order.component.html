@@ -1,0 +1,63 @@
+<div class="container bg-dark">
+    <div class="cart-top">
+        <div class="cart-top-left">
+            <h3 class="text-light">Completing your order</h3>
+        </div>
+    </div>
+    <div class="order-detail-list mt-3">
+        <form class="complete-order-form mt-2 mb-2" #completeOrderForm="ngForm" (ngSubmit)="completeOrder()" action="">
+            <div class="form-group w-50 mt-2">
+                <label for="firstName" class="text-light">First Name</label>
+                <input required ngModel name="firstName" #firstName="ngModel" id="firstName" type="text" class="form-control">
+                <div class="alert alert-danger p-1 mt-1" *ngIf="firstName.touched && firstName.invalid">Field is required</div>
+            </div>
+            <div class="form-group w-50 mt-2">
+                <label for="lastName" class="text-light">Last Name</label>
+                <input required ngModel name="lastName" #lastName="ngModel" id="lastName" type="text" class="form-control">
+                <div class="alert alert-danger p-1 mt-1" *ngIf="lastName.touched && lastName.invalid">Field is required</div>
+            </div>
+            <div class="form-group w-50 mt-2">
+                <label for="email" class="text-light">Email</label>
+                <input required ngModel name="email" #email="ngModel" id="email" type="email" class="form-control">
+                <div class="alert alert-danger p-1 mt-1" *ngIf="email.touched && email.invalid">Field is required</div>
+            </div>
+            <div class="form-group w-50 mt-2">
+                <label for="phone" class="text-light">Phone</label>
+                <input required ngModel name="phone" #phone="ngModel" id="phone" type="tel" class="form-control">
+                <div class="alert alert-danger p-1 mt-1" *ngIf="phone.touched && phone.invalid">Field is required</div>
+            </div>
+            <div class="form-group w-50 mt-2">
+                <label for="payment" class="text-light">Payment type</label>
+                <select required ngModel name="payment" #payment="ngModel" class="form-select" aria-label="Default select example">
+                    <option value="Card">Card</option>
+                    <option value="Cash">Cash</option>
+                </select>
+                <div class="alert alert-danger p-1 mt-1" *ngIf="payment.touched && payment.invalid">Field is required</div>
+            </div>
+            <div class="form-group w-50 mt-2">
+                <label for="comment" class="text-light">Comments (optional)</label>
+                <textarea maxlength="600" ngModel name="comment" #comment="ngModel" id="comment" cols="10" rows="5" class="form-control"></textarea>
+                <div class="alert alert-danger p-1 mt-1" *ngIf="comment.touched && comment.invalid">Max character count exceeded</div>
+            </div>
+            <input class="btn btn-success mt-2 mb-2" [disabled]="!completeOrderForm.valid" type="submit" data-bs-toggle="modal" data-bs-target="#completeOrderModal" value="Order">
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="completeOrderModal" tabindex="-1" aria-labelledby="completeOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="completeOrderModalLabel">Order Completed</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" routerLink="/"></button>
+        </div>
+        <div class="modal-body">
+          <h2>Thank you for your purchase!</h2>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" routerLink="/">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>

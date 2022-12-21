@@ -1,0 +1,87 @@
+<div class="container bg-dark">
+    <div class="filter-search">
+      <div class="genre-box">
+        <div type="button" class="btn btn-secondary text-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+         Genres
+        </div>
+        <div class="chosen-genres">
+          <p class="genre" *ngFor="let genre of chosenGenres">{{genre}}</p>
+        </div>
+      </div>
+      <div class="search-box">
+        <form class="d-flex" role="search">
+          <input ngModel name="searchWord" #searchWord="ngModel" id="searchWord" (ngModelChange)="searchByName(searchWord)" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        </form>
+      </div>
+    </div>
+    <div class="add-game-btn">
+      <button *ngIf="isManagerOrAdmin()" class="btn btn-success" routerLink="/add-game">Add Game</button>
+    </div>
+    <div class="row row-cols-4">
+      <div class="col mb-3 mt-3" *ngFor="let game of filteredGames">
+        <div class="card w-auto image" style="width: 18rem;">
+            <img [src]="game.imageUrl" class="card-img-top" alt="cover">
+            <div *ngIf="isManagerOrAdmin()" class="image-overlay">
+              <div class="edit-delete-link" routerLink="/edit-game/{{game.id}}">Edit</div>
+              <div class="edit-delete-link" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="setGameId(game.id)" >Delete</div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title"><a routerLink="/games/{{game.id}}">{{game.title}}</a></h5>
+              <div class="genre-list">
+                <p class="genre" *ngFor="let genre of game.genres">{{genre.name}}</p>
+              </div>
+              <div class="game-price">
+                <h5>{{game.price | currency}}</h5>
+                <a class="btn btn-success" (click)="addToCart(game)">Buy</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Choose Genres</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="row row-cols-2">
+              <div class="col" *ngFor="let genre of genres">
+                  <div class="form-check">
+                      <input class="form-check-input" name="{{genre.name}}" (change)="onChange($event)" [value]="genre.id" type="checkbox"  id="flexCheckDefault">
+                      <label class="form-check-label" for="flexCheckDefault">
+                        {{genre.name}}
+                      </label>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete Game</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div>Are you sure you want to delete the game?</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="deleteGame()">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>

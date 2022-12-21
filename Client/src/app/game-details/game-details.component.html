@@ -1,0 +1,82 @@
+<div class="container bg-dark" *ngIf="game">
+  <div class="m-3 w-75">
+    <img class="w-75" [src]="game.imageUrl" alt="imageUrl">
+    <h1 class="text-light m-2">{{game.title}}</h1>
+    <div class="price-buy w-75">
+      <h3 class="text-light m-2">{{game.price | currency}}</h3>
+      <button *ngIf="isAuthenticated() && isManager()" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#genreModal">
+        Add Genres
+      </button>
+      <button *ngIf="isAuthenticated() && isManager()" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gameImageModal">
+        Add Image
+      </button>
+      <button class="btn btn-success">BUY</button>
+    </div>
+    <div class="line w-75"></div>
+    <div class="genre-list-detailed">
+      <p class="genre" *ngFor="let genre of game.genres">{{genre.name}}</p>
+    </div>
+    <div class="game-desc text-light mt-3 mb-3 w-75">{{game.description}}</div>
+    <button *ngIf="isAuthenticated()" class="btn btn-primary" (click)="toggleCommentArea()">Comment</button>
+    <form *ngIf="isCommentAreaActive" class="mt-2 mb-2" #commentForm="ngForm"
+      (ngSubmit)="addComment(undefined, commentForm.value)">
+      <div class="form-group w-50 mt-2">
+        <textarea maxlength="600" ngModel name="commentArea" #commentBody="ngModel" id="commentArea" cols="30" rows="2"
+          class="form-control"></textarea>
+        <div class="alert alert-danger p-1 mt-1" *ngIf="commentBody.touched && commentBody.invalid">Max char count
+          exceeded</div>
+      </div>
+      <input class="btn btn-success mt-2 mb-2" type="submit" value="Save">
+      <button class="btn btn-secondary m-2" (click)="toggleCommentArea()">Cancel</button>
+    </form>
+    <app-comment *ngFor="let comment of game.comments" [comment]="comment"></app-comment>
+  </div>
+</div>
+
+<!-- Add Genres Modal -->
+<div class="modal fade" id="genreModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Genres</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row row-cols-2">
+          <div class="col" *ngFor="let genre of genres">
+            <div class="form-check">
+              <input class="form-check-input" [checked]="checkedGenres.includes(genre.id)" name="{{genre.name}}" (change)="onChange($event)" type="checkbox" [value]="genre.id" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">{{genre.name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateGame()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Image Modal -->
+<div class="modal fade" id="gameImageModal" tabindex="-1" aria-labelledby="gameImageModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gameImageModalLabel">Add Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group w-50 mt-2">
+          <label for="gameImgUrl" class="text-dark"> Image Url</label>
+          <input required ngModel name="gameImgUrl" #gameImgUrl="ngModel" id="gameImgUrl" type="text" class="form-control">
+          <div class="alert alert-danger p-1 mt-1" *ngIf="gameImgUrl.touched && gameImgUrl.invalid">Image Url is required</div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="saveImage(gameImgUrl)">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container bg-dark">
+    <div class="cart-top">
+        <div class="cart-top-left">
+            <h3 class="text-light">Your cart</h3>
+        </div>
+        <div class="cart-top-right">
+            <h2 class="total text-light">Total: {{calculateTotal() | currency}}</h2>
+        <div type="button" class=" proceed btn btn-success" routerLink="/complete-order">Proceed</div>
+        </div>
+    </div>
+    <div class="order-detail-list mt-3">
+        <div class="empty-cart" *ngIf="order.orderDetails.length == 0">
+            <h1 class="text-light">Your cart is empty!</h1>
+        </div>
+        <div *ngFor="let detail of order.orderDetails" class="order-detail">
+            <div class="order-image">
+                <img class="detail-img" src="{{detail.game?.imageUrl}}" alt="order detail image">
+            </div>
+            <div class="title-price">
+                <h6 class="text-light">{{detail.game?.title}}</h6>
+                <h3 class="text-light">{{detail.game?.price | currency}}</h3>
+            </div>
+            <div class="quantity-buttons">
+                <button class="minus" (click)="decrease(detail)">-</button>
+                <button class="middle text-light">{{detail.quantity}}</button>
+                <button class="plus" (click)="increase(detail.id)">+</button>
+            </div>
+            <div class="total-price">
+                <h6 class="text-light">Total:</h6>
+                <h3 class="text-light">{{totalPrice(detail.quantity, detail.game) | currency}}</h3>
+            </div>
+            <div class="order-detail-remove">
+                <button class="remove-detail text-light" (click)="deleteDetail(detail.id)">X</button>
+            </div>
+        </div>
+    </div>
+</div>

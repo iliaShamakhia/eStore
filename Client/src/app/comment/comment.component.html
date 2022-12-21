@@ -1,0 +1,46 @@
+<div class="mt-3">
+    <div>
+        <div *ngIf="!isDeleted(comment)">
+            <h5 class="text-light">{{comment.username}}</h5>
+            <p class="m-0 text-light">{{comment.body}}</p>
+            <div class="comment-info w-50">
+                <p *ngIf="isAuthenticated()" type="button" class="m-0 text-light" (click)="toggleReplyCommentArea()">Reply</p>
+                <p *ngIf="(isAuthenticated() && checkUser(comment.userId)) || (isAuthenticated() && isManager())" type="button" class="m-0 text-light "
+                    (click)="deleteComment(comment)">Delete</p>
+                <p *ngIf="(isAuthenticated() && checkUser(comment.userId)) || (isAuthenticated() && isManager())" type="button" class="m-0 text-light "
+                    (click)="toggleEditCommentArea()">Edit</p>
+                <p class="text-light">{{showCommentDate(comment.dateAdded.toString())}}</p>
+            </div>
+        </div>
+        <div *ngIf="(isDeleted(comment) && checkUser(comment.userId)) || (isDeleted(comment) && isManager())">
+            <p class="text-light" type="button" (click)="restoreComment(comment)">Restore</p>
+        </div>
+        <form *ngIf="isEditCommentAreaActive" class="mt-2 mb-2" #editForm="ngForm"
+            (ngSubmit)="editComment(comment, editForm.value)">
+            <div class="form-group w-50 mt-2">
+                <textarea maxlength="600" [(ngModel)]="comment.body" name="editArea" #editBody="ngModel" id="editArea"
+                    cols="30" rows="2" class="form-control"></textarea>
+                <div class="alert alert-danger p-1 mt-1" *ngIf="editBody.touched && editBody.invalid">Max char count
+                    exceeded</div>
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Save">
+            <button class="btn btn-secondary m-2" (click)="toggleEditCommentArea()">Cancel</button>
+        </form>
+        <form *ngIf="isReplyCommentAreaActive" class="mt-2 mb-2" #replyForm="ngForm"
+            (ngSubmit)="replyComment(comment.id, comment.gameId, replyForm.value)">
+            <div class="form-group w-50 mt-2">
+                <textarea maxlength="600" ngModel name="commentArea" #replyBody="ngModel" id="replyArea" cols="30"
+                    rows="2" class="form-control"></textarea>
+                <div class="alert alert-danger p-1 mt-1" *ngIf="replyBody.touched && replyBody.invalid">Max char count
+                    exceeded</div>
+            </div>
+            <input class="btn btn-success mt-2 mb-2" type="submit" value="Save">
+            <button class="btn btn-secondary m-2" (click)="toggleReplyCommentArea()">Cancel</button>
+        </form>
+        <div *ngIf="comment.childComments" style="padding-left: 3%;">
+            <div *ngFor="let childComment of comment.childComments;">
+                <app-comment [comment]="childComment"></app-comment>
+            </div>
+        </div>
+    </div>
+</div>

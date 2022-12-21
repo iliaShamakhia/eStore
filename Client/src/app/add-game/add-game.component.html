@@ -1,0 +1,25 @@
+<div class="container bg-dark">
+    <form class="mt-2 mb-2" #gameForm="ngForm" (ngSubmit)="onGameCreate(gameForm.value)" action="">
+        <div class="form-group w-50 mt-2">
+            <label for="gTitle" class="text-light"> Title</label>
+            <input required ngModel name="gTitle" #gameTitle="ngModel" id="gTitle" type="text" class="form-control">
+            <div class="alert alert-danger p-1 mt-1" *ngIf="gameTitle.touched && gameTitle.invalid">Title is required</div>
+        </div>
+        <div class="form-group w-50 mt-2">
+            <label for="gDesc" class="text-light">Description</label>
+            <textarea required ngModel name="gDesc" #description="ngModel" id="gDesc" cols="10" rows="5" class="form-control"></textarea>
+            <div class="alert alert-danger p-1 mt-1" *ngIf="description.touched && description.invalid">Description is required</div>
+        </div>
+        <div class="form-group w-50 mt-2">
+            <label for="gImgUrl" class="text-light"> Image Url</label>
+            <input required ngModel name="gImgUrl" #imgUrl="ngModel" id="gImgUrl" type="text" class="form-control">
+            <div class="alert alert-danger p-1 mt-1" *ngIf="imgUrl.touched && imgUrl.invalid">Image Url is required</div>
+        </div>
+        <div class="form-group w-50 mt-2">
+            <label for="gPrice" class="text-light">Price</label>
+            <input required ngModel name="gPrice" #price="ngModel" id="gPrice" type="text" class="form-control">
+            <div class="alert alert-danger p-1 mt-1" *ngIf="price.touched && price.invalid">Price is required</div>
+        </div>
+        <input class="btn btn-success mt-2 mb-2" type="submit" value="Add">
+    </form>
+</div>
